@@ -74,4 +74,14 @@ function createNewItem(e) {
     </li>
     `;
     actualUl.insertAdjacentHTML("beforeend", li);
+    const item = actualUl.lastElementChild;
+    const liBtn = item.querySelector("button");
+    handleItemDeletion(liBtn);
+    actualTextInput.value = "";
+}
+function handleItemDeletion(btn) {
+    btn.addEventListener("click", () => {
+        const elToRemove = btn.parentElement;
+        elToRemove.remove();
+    });
 }
