@@ -10,6 +10,7 @@ function addContainerListners(currentContainer) {
     addItemBtnListeners(currentAddItemBtn);
     closingFormBtnListenenrs(currentCloseFormBtn);
     addFormSubmitListeners(currentForm);
+    addDDListeners(currentContainer);
 }
 itemsContainer.forEach((container) => addContainerListners(container));
 function deleteBtnListeners(btn) {
@@ -23,6 +24,12 @@ function closingFormBtnListenenrs(btn) {
 }
 function addFormSubmitListeners(form) {
     form.addEventListener("submit", createNewItem);
+}
+function addDDListeners(element) {
+    element.addEventListener("dragstart", handleDragStart);
+    element.addEventListener("dragover", handleDragOver);
+    element.addEventListener("drop", handleDrop);
+    element.addEventListener("dragend", handleDragEnd);
 }
 function handleContainerDeletion(e) {
     const btn = e.target;
@@ -77,6 +84,7 @@ function createNewItem(e) {
     const item = actualUl.lastElementChild;
     const liBtn = item.querySelector("button");
     handleItemDeletion(liBtn);
+    addDDListeners(item);
     actualTextInput.value = "";
 }
 function handleItemDeletion(btn) {
@@ -84,4 +92,74 @@ function handleItemDeletion(btn) {
         const elToRemove = btn.parentElement;
         elToRemove.remove();
     });
+}
+// Drag and drop
+let dragSrcEl;
+function handleDragStart(e) {
+    var _a;
+    e.stopPropagation();
+    if (actualContainer)
+        toggleForm(actualBtn, actualForm, false);
+    dragSrcEl = this;
+    (_a = e.dataTransfer) === null || _a === void 0 ? void 0 : _a.setData("text/html", this.innerHTML);
+}
+function handleDragOver(e) {
+    e.preventDefault();
+}
+function handleDrop(e) {
+    e.stopPropagation();
+    const receptionEl = this;
+    if (dragSrcEl.nodeName === "LI" && receptionEl.classList.contains("items-container")) {
+        receptionEl.querySelector("ul").appendChild(dragSrcEl);
+        addDDListeners(dragSrcEl);
+        handleItemDeletion(dragSrcEl.querySelector("button"));
+    }
+}
+// add new container
+const addContainerBtn = document.querySelector(".add-container-btn");
+const addContainerForm = document.querySelector(".add-new-container form");
+const addContainerFormInput = document.querySelector(".add-new-container input");
+const validationNewContainer = document.querySelector(".add-new-container .validation-msg");
+const addContainerCloseBtn = document.querySelector(".close-add-list");
+const addNewContainer = document.querySelector(".add-new-container");
+const containerList = document.querySelector(".main-content");
+addContainerBtn.addEventListener("click", () => {
+    toggleForm(addContainerBtn, addContainerForm, true);
+});
+addContainerCloseBtn.addEventListener("click", () => {
+    toggleForm(addContainerBtn, addContainerForm, false);
+});
+addContainerForm.addEventListener("submit", createNewContainer);
+function createNewContainer(e) {
+    e.preventDefault();
+    if (addContainerFormInput.value.length === 0) {
+        validationNewContainer.textContent = "Must be at least 1 character length";
+        return;
+    }
+    else {
+        validationNewContainer.textContent = "";
+    }
+    const itemsContainer = document.querySelector(".items-container");
+    const newContainer = itemsContainer.cloneNode();
+    const newContainerContent = `
+        <div class="top-container">
+          <h2>${addContainerFormInput.value}</h2>
+          <button class="delete-container-btn">X</button>
+        </div>
+        <ul></ul>
+        <button class="add-item-btn">Add an item</button>
+        <form autocomplete="off">
+          <div class="top-form-container">
+            <label for="item">Add a new item</label>
+            <button type="button" class="close-form-btn">X</button>
+          </div>
+          <input type="text" id="item" />
+          <span class="validation-msg"></span>
+          <button type="submit">Submit</button>
+        </form>
+    `;
+    newContainer.innerHTML = newContainerContent;
+    containerList.insertBefore(newContainer, addNewContainer);
+    addContainerFormInput.value = "";
+    addContainerListners(newContainer);
 }
