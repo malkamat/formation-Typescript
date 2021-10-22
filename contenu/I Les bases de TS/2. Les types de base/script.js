@@ -1,11 +1,11 @@
 "use strict";
 var str = "str";
 var num = 5;
-var arr = [];
+var array = [];
 var obj = {
     a: 5
 };
-var toogle = true;
+var toggle = true;
 var anything;
 var randomNumber;
 var conversion = function (celsius) {
