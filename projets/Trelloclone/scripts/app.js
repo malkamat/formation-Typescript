@@ -107,12 +107,37 @@ function handleDragOver(e) {
     e.preventDefault();
 }
 function handleDrop(e) {
+    var _a;
     e.stopPropagation();
     const receptionEl = this;
     if (dragSrcEl.nodeName === "LI" && receptionEl.classList.contains("items-container")) {
         receptionEl.querySelector("ul").appendChild(dragSrcEl);
         addDDListeners(dragSrcEl);
         handleItemDeletion(dragSrcEl.querySelector("button"));
+    }
+    if (dragSrcEl !== this && this.classList[0] === dragSrcEl.classList[0]) {
+        dragSrcEl.innerHTML = this.innerHTML;
+        this.innerHTML = (_a = e.dataTransfer) === null || _a === void 0 ? void 0 : _a.getData("text/html");
+        if (this.classList.contains("items-container")) {
+            addContainerListners(this);
+            this.querySelectorAll("li").forEach((li) => {
+                handleItemDeletion(li.querySelector("button"));
+                addDDListeners(li);
+            });
+        }
+        else {
+            addDDListeners(this);
+            handleItemDeletion(this.querySelector("button"));
+        }
+    }
+}
+function handleDragEnd(e) {
+    e.stopPropagation();
+    if (this.classList.contains("items-container")) {
+        addContainerListners(this);
+    }
+    else {
+        addDDListeners(this);
     }
 }
 // add new container

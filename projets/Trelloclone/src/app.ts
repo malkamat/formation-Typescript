@@ -144,6 +144,31 @@ function handleDrop(this: HTMLElement , e: DragEvent) {
         addDDListeners(dragSrcEl)
         handleItemDeletion(dragSrcEl.querySelector("button") as HTMLButtonElement)
     }
+
+    if(dragSrcEl !== this && this.classList[0] === dragSrcEl.classList[0]) {
+        dragSrcEl.innerHTML = this.innerHTML
+        this.innerHTML = e.dataTransfer?.getData("text/html") as string
+        if(this.classList.contains("items-container")) {
+            addContainerListners(this as HTMLDivElement)
+
+            this.querySelectorAll("li").forEach((li: HTMLLIElement) => {
+                handleItemDeletion(li.querySelector("button") as HTMLButtonElement)
+                addDDListeners(li)
+            })
+        } else {
+            addDDListeners(this)
+            handleItemDeletion(this.querySelector("button") as HTMLButtonElement)
+        }
+    }
+}
+
+function handleDragEnd(this: HTMLElement , e: DragEvent) {
+    e.stopPropagation()
+    if(this.classList.contains("items-container")) {
+        addContainerListners(this as HTMLDivElement)
+    } else {
+        addDDListeners(this)
+    }
 }
 
 // add new container
