@@ -11,10 +11,12 @@ function addContainerListners(currentContainer: HTMLDivElement) {
     const currentContainerDeletionBtn = currentContainer.querySelector(".delete-container-btn") as HTMLButtonElement
     const currentAddItemBtn = currentContainer.querySelector(".add-item-btn") as HTMLButtonElement
     const currentCloseFormBtn = currentContainer.querySelector(".close-form-btn") as HTMLButtonElement
+    const currentForm = currentContainer.querySelector("form") as HTMLFormElement
 
     deleteBtnListeners(currentContainerDeletionBtn)
     addItemBtnListeners(currentAddItemBtn)
     closingFormBtnListenenrs(currentCloseFormBtn)
+    addFormSubmitListeners(currentForm)
 }
 
 
@@ -32,6 +34,11 @@ function addItemBtnListeners(btn: HTMLButtonElement) {
 
 function closingFormBtnListenenrs(btn: HTMLButtonElement) {
     btn.addEventListener("click" , () => toggleForm(actualBtn, actualForm, false))
+}
+
+
+function addFormSubmitListeners(form: HTMLFormElement) {
+    form.addEventListener("submit" , createNewItem)
 }
 
 function handleContainerDeletion(e: MouseEvent) {
@@ -67,5 +74,26 @@ function setContainerItems(btn: HTMLButtonElement) {
     actualForm = actualContainer.querySelector("form") as HTMLFormElement
     actualTextInput = actualContainer.querySelector("input") as HTMLInputElement
     actualValidation = actualContainer.querySelector(".validation-msg") as HTMLSpanElement
+}
+
+function createNewItem(e: Event) {
+    e.preventDefault()
+    //validation
+    if(actualTextInput.value.length === 0) {
+        actualValidation.textContent = "Must be at least 1 character length"
+        return
+    } else {
+        actualValidation.textContent = ""
+    }
+    //creation item
+    const itemContent = actualTextInput.value
+    const li = `
+    <li class="item" draggable="true">
+    <p>${itemContent}</p>
+    <button>X</button>
+    </li>
+    `
+    actualUl.insertAdjacentHTML("beforeend",li)
+
 }
 
