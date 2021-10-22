@@ -1,7 +1,7 @@
 "use strict";
 const itemsContainer = document.querySelectorAll(".items-container");
 let actualContainer, actualBtn, actualUl, actualForm, actualTextInput, actualValidation;
-function addContainerListners(currentContainer) {
+function addContainerlisteners(currentContainer) {
     const currentContainerDeletionBtn = currentContainer.querySelector(".delete-container-btn");
     const currentAddItemBtn = currentContainer.querySelector(".add-item-btn");
     const currentCloseFormBtn = currentContainer.querySelector(".close-form-btn");
@@ -12,7 +12,7 @@ function addContainerListners(currentContainer) {
     addFormSubmitListeners(currentForm);
     addDDListeners(currentContainer);
 }
-itemsContainer.forEach((container) => addContainerListners(container));
+itemsContainer.forEach((container) => addContainerlisteners(container));
 function deleteBtnListeners(btn) {
     btn.addEventListener("click", handleContainerDeletion);
 }
@@ -119,7 +119,7 @@ function handleDrop(e) {
         dragSrcEl.innerHTML = this.innerHTML;
         this.innerHTML = (_a = e.dataTransfer) === null || _a === void 0 ? void 0 : _a.getData("text/html");
         if (this.classList.contains("items-container")) {
-            addContainerListners(this);
+            addContainerlisteners(this);
             this.querySelectorAll("li").forEach((li) => {
                 handleItemDeletion(li.querySelector("button"));
                 addDDListeners(li);
@@ -134,7 +134,7 @@ function handleDrop(e) {
 function handleDragEnd(e) {
     e.stopPropagation();
     if (this.classList.contains("items-container")) {
-        addContainerListners(this);
+        addContainerlisteners(this);
     }
     else {
         addDDListeners(this);
@@ -186,5 +186,5 @@ function createNewContainer(e) {
     newContainer.innerHTML = newContainerContent;
     containerList.insertBefore(newContainer, addNewContainer);
     addContainerFormInput.value = "";
-    addContainerListners(newContainer);
+    addContainerlisteners(newContainer);
 }

@@ -8,7 +8,7 @@ let actualContainer: HTMLDivElement,
     actualValidation: HTMLSpanElement;
 
 
-function addContainerListners(currentContainer: HTMLDivElement) {
+function addContainerlisteners(currentContainer: HTMLDivElement) {
     const currentContainerDeletionBtn = currentContainer.querySelector(".delete-container-btn") as HTMLButtonElement
     const currentAddItemBtn = currentContainer.querySelector(".add-item-btn") as HTMLButtonElement
     const currentCloseFormBtn = currentContainer.querySelector(".close-form-btn") as HTMLButtonElement
@@ -22,7 +22,7 @@ function addContainerListners(currentContainer: HTMLDivElement) {
 }
 
 
-itemsContainer.forEach((container: HTMLDivElement) => addContainerListners(container))
+itemsContainer.forEach((container: HTMLDivElement) => addContainerlisteners(container))
 
 
 function deleteBtnListeners(btn: HTMLButtonElement) {
@@ -149,7 +149,7 @@ function handleDrop(this: HTMLElement , e: DragEvent) {
         dragSrcEl.innerHTML = this.innerHTML
         this.innerHTML = e.dataTransfer?.getData("text/html") as string
         if(this.classList.contains("items-container")) {
-            addContainerListners(this as HTMLDivElement)
+            addContainerlisteners(this as HTMLDivElement)
 
             this.querySelectorAll("li").forEach((li: HTMLLIElement) => {
                 handleItemDeletion(li.querySelector("button") as HTMLButtonElement)
@@ -165,7 +165,7 @@ function handleDrop(this: HTMLElement , e: DragEvent) {
 function handleDragEnd(this: HTMLElement , e: DragEvent) {
     e.stopPropagation()
     if(this.classList.contains("items-container")) {
-        addContainerListners(this as HTMLDivElement)
+        addContainerlisteners(this as HTMLDivElement)
     } else {
         addDDListeners(this)
     }
@@ -224,5 +224,5 @@ function createNewContainer(e: Event) {
     newContainer.innerHTML = newContainerContent
     containerList.insertBefore(newContainer , addNewContainer)
     addContainerFormInput.value = ""
-    addContainerListners(newContainer)
+    addContainerlisteners(newContainer)
 }
